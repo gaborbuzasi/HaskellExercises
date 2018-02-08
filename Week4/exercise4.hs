@@ -83,18 +83,15 @@ duplicateFree (x:xs)
     | elem x xs = duplicateFree xs
     | otherwise = x : duplicateFree xs 
 
-
 isFn :: (Eq a, Eq b) => [(a,b)] -> [a] -> [b] -> Bool
 isFn fs xs ys = setEqual2 xs (allFst fs) && allDifferent (allFst (duplicateFree fs)) && subset (allSnd fs) ys
 
-
-{- 
 mapTo :: (Eq a,Eq b) => [(a,b)] -> b -> [a]
-mapTo [] y  = 
+mapTo [] y  = error "Y is not mapped to"
 mapTo (x:xs) y
-	|
-	|
--}
+	| elem y snd(x) = fst(x) : mapTo xs y
+	| otherwise = mapTo xs y
+
 
 {- 
 isInjection :: (Eq a, Eq b) => [(a,b)] -> [a] -> [b] -> Bool
