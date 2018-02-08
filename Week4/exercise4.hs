@@ -64,12 +64,28 @@ allSndMap xs = map snd xs
 allDifferent :: (Eq a) => [a] -> Bool
 allDifferent [] = True
 allDifferent (x:xs)
-	| elem x xs = False
-	| otherwise = allDifferent xs
+    | elem x xs = False
+    | otherwise = allDifferent xs
+
+
+subset :: (Eq a) => [a] -> [a] -> Bool
+subset [] _ = True
+subset (x:xs) ys
+    | elem x ys = subset xs ys
+    | otherwise = False
+
+setEqual2 :: (Eq a) => [a] -> [a] -> Bool
+setEqual2 xs ys = subset xs ys && subset ys xs
+
+duplicateFree :: (Eq a) => [a] -> [a]
+duplicateFree [] = []
+duplicateFree (x:xs)
+    | elem x xs = duplicateFree xs
+    | otherwise = x : duplicateFree xs 
 
 
 isFn :: (Eq a, Eq b) => [(a,b)] -> [a] -> [b] -> Bool
-isFn fs xs ys = (allFst fs) == xs && 
+isFn fs xs ys = setEqual2 xs (allFst fs) && allDifferent (allFst (duplicateFree fs)) && subset (allSnd fs) ys
 
 
 {- 
